@@ -1,0 +1,38 @@
+/* 기본 스타일 생략... */
+.admin-toggle-area { margin-bottom: 20px; text-align: right; }
+
+.btn-admin {
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 2px solid #FF3B30;
+    background: white;
+    color: #FF3B30;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-admin.active {
+    background: #FF3B30;
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 59, 48, 0.4);
+}
+
+/* 관리자 모드일 때 카드에 생기는 X 버튼 스타일 */
+.delete-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 59, 48, 0.9);
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: none; /* 기본은 숨김 */
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 100;
+}
+
+.admin-active .delete-overlay { display: flex; } /* 관리자 모드 활성화 시 보임 */

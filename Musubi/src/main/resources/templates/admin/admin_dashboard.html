@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layout}">
+<section layout:fragment="content">
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        .admin-table th {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid #F5F5F7;
+            color: #86868B;
+            font-weight: 600;
+        }
+        .admin-table td {
+            padding: 15px;
+            border-bottom: 1px solid #F5F5F7;
+            vertical-align: middle;
+        }
+        .btn-delete {
+            padding: 8px 16px;
+            background: #FFEBEB;
+            color: #FF3B30;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-delete:hover {
+            background: #FF3B30;
+            color: white;
+        }
+    </style>
+
+    <div class="admin-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 style="font-weight: 800; font-size: 1.8rem; margin: 0;">管理者ダッシュボード</h1>
+            <span style="background: #FF3B30; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">ADMIN MODE</span>
+        </div>
+        
+        <p style="color: #86868B;">共有されている全ての楽曲の管理および削除が可能です。</p>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>アーティスト</th>
+                    <th>投稿者</th>
+                    <th>作成日</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="music : ${musicList}">
+                    <td>
+                        <a th:href="@{|/music/detail/${music.id}|}" th:text="${music.title}" style="text-decoration: none; color: #1D1D1F; font-weight: 600;"></a>
+                    </td>
+                    <td th:text="${music.artist}" style="color: #86868B;"></td>
+                    <td>
+                        <span th:text="${music.author != null ? music.author.username : '匿名'}" style="font-size: 0.9rem;"></span>
+                    </td>
+                    <td th:text="${#temporals.format(music.createDate, 'yyyy-MM-dd')}" style="color: #86868B; font-size: 0.9rem;"></td>
+                    <td>
+                        <a href="javascript:void(0);" th:data-uri="@{|/music/delete/${music.id}|}" class="delete btn-delete">削除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(musicList)}" style="text-align: center; padding: 50px; color: #86868B;">
+            管理対象の楽曲が存在しません。
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="/music/list" style="color: #007AFF; text-decoration: none; font-weight: 600;">← ホームへ戻る</a>
+        </div>
+    </div>
+
+    <script type='text/javascript'>
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function(element) {
+            element.addEventListener('click', function() {
+                if(confirm("この投稿を完全に削除しますか？\nこの操作は取り消せません。")) {
+                    location.href = this.dataset.uri;
+                };
+            });
+        });
+    </script>
+</section>
+</html>

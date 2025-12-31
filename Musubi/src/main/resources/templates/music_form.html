@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<section layout:fragment="content">
+    <div style="max-width: 800px; margin: 0 auto; padding: 40px 20px;">
+        <h2 style="font-weight: 800; margin-bottom: 30px;">音楽を共有する</h2>
+        
+        <form th:action="@{/music/create}" method="post" enctype="multipart/form-data" style="background: white; padding: 40px; border-radius: 20px; border: 1px solid #efefef;">
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">タイトル</label>
+                <input type="text" name="title" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;">
+            </div>
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">アーティスト</label>
+                <input type="text" name="artist" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;">
+            </div>
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">YouTube URL</label>
+                <input type="url" name="url" placeholder="https://www.youtube.com/watch?v=..." style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;">
+            </div>
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">説明</label>
+                <textarea name="content" rows="5" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;"></textarea>
+            </div>
+            <div style="margin-bottom: 30px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">カバー画像またはファイル</label>
+                <input type="file" name="file" style="width: 100%;">
+            </div>
+            <button type="submit" style="width: 100%; padding: 15px; background: #007AFF; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer;">共有する</button>
+        </form>
+    </div>
+</section>
+</html>

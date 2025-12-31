@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6"
+      layout:decorate="~{layout}">
+<section layout:fragment="content">
+    <style>
+        .floating-random-btn {
+            position: fixed;
+            right: 150px;
+            bottom: 70px;
+            width: 80px;
+            height: 80px;
+            background-color: #007AFF;
+            color: white !important;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            text-decoration: none;
+            box-shadow: 0 150px 200px rgba(0, 122, 255, 0.4);
+            transition: transform 0.2s ease;
+            z-index: 9999;
+        }
+        .floating-random-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+
+    <div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
+            <div>
+                <h2 th:text="${music.title}" style="font-weight: 800; margin-bottom: 12px; font-size: 2rem;"></h2>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <a th:href="@{|/music/vote/${music.id}|}" style="text-decoration: none;">
+                        <span style="color: #FF3B30; font-size: 1.1rem; font-weight: 700; background: #FFF5F5; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+                            ❤️ <span th:text="${#lists.size(music.voter)}">0</span>
+                        </span>
+                    </a>
+                    <span sec:authorize="hasRole('ADMIN')" 
+                          style="background: #F2F2F7; color: #8E8E93; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid #E5E5EA;">
+                        管理者モード
+                    </span>
+                </div>
+            </div>
+            <div sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{|/music/delete/${music.id}|}" 
+                   onclick="return confirm('この楽曲を削除しますか？')"
+                   style="display: inline-block; padding: 12px 24px; background: #FF3B30; color: white; border-radius: 12px; text-decoration: none; font-weight: 700;">
+                    楽曲削除
+                </a>
+            </div>
+        </div>
+
+        <div th:if="${youtubeId}" style="aspect-ratio: 16/9; width: 100%; border-radius: 24px; overflow: hidden; background: #000; margin-bottom: 40px;">
+            <iframe th:src="@{|https://www.youtube.com/embed/${youtubeId}|}" 
+                    style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+        </div>
+
+        <div th:if="${music.filePath}" style="margin-bottom: 40px; background: #F2F2F7; padding: 20px; border-radius: 20px;">
+            <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.9rem;">アップロードされた音源</p>
+            <audio controls style="width: 100%;">
+                <source th:src="@{|/upload/${music.filePath}|}" type="audio/mpeg">
+                お使いのブラウザはオーディオ再生に対応していません。
+            </audio>
+        </div>
+
+        <div style="background: #FFFFFF; padding: 30px; border-radius: 20px; border: 1px solid #F2F2F7; margin-bottom: 50px;">
+            <p th:text="${music.content}" style="white-space: pre-line; line-height: 1.8; color: #1C1C1E;"></p>
+        </div>
+
+        <div style="margin-top: 50px; border-top: 2px solid #F2F2F7; padding-top: 40px;">
+            <h4 style="font-weight: 700; margin-bottom: 25px;" th:text="|コメント (${#lists.size(music.answerList)})|"></h4>
+            <form th:action="@{|/music/answer/create/${music.id}|}" method="post">
+                <textarea name="content" rows="3" required placeholder="コメントを入力してください" 
+                          style="width: 100%; border: 1.5px solid #E5E5EA; border-radius: 16px; padding: 20px; outline: none;"></textarea>
+                <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+                    <button type="submit" style="background: #007AFF; color: white; border: none; padding: 14px 35px; border-radius: 14px; font-weight: 700; cursor: pointer;">
+                        投稿
+                    </button>
+                </div>
+            </form>
+            <div th:each="answer : ${music.answerList}" style="margin-top: 25px; padding: 25px; background: #F9F9F9; border-radius: 18px;">
+                <div th:text="${answer.content}" style="line-height: 1.6;"></div>
+                <div style="margin-top: 15px; font-size: 0.85rem; color: #8E8E93;">
+                    <span th:text="${answer.author.username}" style="font-weight: 600; color: #1C1C1E;"></span>
+                    <span th:text="${#temporals.format(answer.createDate, 'yyyy.MM.dd HH:mm')}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a th:href="@{/music/random}" class="floating-random-btn" title="ランダム再生">🎲</a>
+</section>
+</html>

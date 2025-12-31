@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layout}">
+<section layout:fragment="content">
+    <style>
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .add-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #007AFF;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 32px;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+            transition: transform 0.2s;
+        }
+        .add-btn:hover { transform: scale(1.1); }
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .music-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        .music-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .thumb-box { width: 100%; height: 180px; background: #000; overflow: hidden; }
+        .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+        .no-data {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 100px 0;
+            color: #86868B;
+        }
+    </style>
+
+    <div class="feed-header">
+        <h1 style="font-weight: 800; font-size: 2.2rem; letter-spacing: -1px;">楽曲フィード</h1>
+        <a th:href="@{/music/create}" class="add-btn">+</a>
+    </div>
+
+    <div class="music-grid">
+        <div th:if="${#lists.isEmpty(musicList)}" class="no-data">
+            <p style="font-size: 1.1rem;">共有された楽曲がまだありません。<br>右下のボタンから最初の曲を投稿しましょう！</p>
+        </div>
+
+        <a th:each="music : ${musicList}" th:href="@{|/music/detail/${music.id}|}" style="text-decoration: none; color: inherit;">
+            <div class="music-card">
+                <div class="thumb-box">
+                    <img th:if="${music.thumbnailUrl}" th:src="${music.thumbnailUrl}" alt="thumbnail">
+                    <div th:unless="${music.thumbnailUrl}" style="width:100%; height:100%; background:#eee; display:flex; align-items:center; justify-content:center; color:#ccc;">No Image</div>
+                </div>
+                <div style="padding: 24px;">
+                    <h3 th:text="${music.title}" style="margin: 0 0 8px 0; font-size: 1.25rem; font-weight: 700;"></h3>
+                    <p th:text="${music.artist}" style="color: #86868B; margin-bottom: 20px; font-size: 0.95rem;"></p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #007AFF; font-weight: 600;">再生する</span> 
+                        <span style="color: #FF3B30; font-weight: 700;">❤️ <span th:text="${music.voteCount}">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+</html>

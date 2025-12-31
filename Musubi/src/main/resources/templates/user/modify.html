@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layout}">
+<section layout:fragment="content">
+    <div style="max-width: 600px; margin: 60px auto; background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.05);">
+        <h2 style="font-weight: 800; font-size: 24px; margin-bottom: 32px; letter-spacing: -0.5px;">会員情報の修正</h2>
+        <form th:action="@{/user/modify}" method="post">
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #1D1D1F;">ユーザー名</label>
+                <input type="text" th:value="${user.username}" readonly 
+                       style="width: 100%; padding: 14px; border: 1px solid #E5E5E7; border-radius: 12px; background: #F5F5F7; color: #86868B;">
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600;">メールアドレス</label>
+                <input type="email" name="email" th:value="${user.email}" required
+                       style="width: 100%; padding: 14px; border: 1px solid #E5E5E7; border-radius: 12px; outline: none;">
+            </div>
+            <div style="margin-bottom: 32px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600;">新しいパスワード (変更する場合のみ)</label>
+                <input type="password" name="password" placeholder="再度設定する場合のみ入力"
+                       style="width: 100%; padding: 14px; border: 1px solid #E5E5E7; border-radius: 12px; outline: none;">
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button type="button" onclick="history.back()" style="flex: 1; padding: 14px; border: none; border-radius: 12px; background: #F5F5F7; color: #333; font-weight: 700; cursor: pointer;">キャンセル</button>
+                <button type="submit" style="flex: 2; padding: 14px; border: none; border-radius: 12px; background: #007AFF; color: white; font-weight: 700; cursor: pointer;">保存する</button>
+            </div>
+        </form>
+    </div>
+</section>
+</html>

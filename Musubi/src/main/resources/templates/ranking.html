@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<section layout:fragment="content">
+    <div style="margin-bottom: 40px;">
+        <h1 style="font-weight: 800; font-size: 2.2rem;">人気ランキング</h1>
+        <p style="color: #86868B;">推薦数が多い順に表示されます。</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px;">
+        <a th:each="music, loop : ${musicList}" th:href="@{|/music/detail/${music.id}|}" style="text-decoration: none; color: inherit;">
+            <div style="background: white; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); position: relative;">
+                <div style="position: absolute; top: 10px; left: 10px; background: rgba(0,122,255,0.9); color: white; padding: 5px 12px; border-radius: 10px; font-weight: 700; z-index: 10;">
+                    TOP <span th:text="${loop.count}"></span>
+                </div>
+                <div style="width: 100%; height: 180px; background: #000;">
+                    <img th:if="${music.thumbnailUrl}" th:src="${music.thumbnailUrl}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="padding: 24px;">
+                    <h3 th:text="${music.title}" style="margin: 0 0 8px 0; font-weight: 700;"></h3>
+                    <p th:text="${music.artist}" style="color: #86868B; margin-bottom: 20px;"></p>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #FF3B30; font-weight: 700;">❤️ <span th:text="${music.voteCount}"></span></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+</html>
