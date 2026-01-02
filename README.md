@@ -159,8 +159,11 @@ MuSuBiは、
 ---
 
 ## 🔗 Repository
+PPT
+https://buly.kr/GvoLgJn
 
-👉 [https://github.com/whgusghkd777-debug/MuSuBiMusic](https://github.com/whgusghkd777-debug/MuSuBiMusic)
+技術ブログ 
+https://url.kr/xt4qjr  
 
 ---
 
