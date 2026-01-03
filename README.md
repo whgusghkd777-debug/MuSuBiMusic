@@ -152,20 +152,14 @@ MuSuBiは、
 
 ## 12. 開発者
 
-* 名前：チョ・ヒョンファン（조현황）
+* 名前：チョ・ヒョンファン
 * 専攻：音楽
-* GitHub：本リポジトリ参照
-
-
 ---
 
 ## 🔗 Repository
-PPT
-https://buly.kr/GvoLgJn
-
-技術ブログ 
-https://url.kr/xt4qjr  
----
+MuSuBi　PPT　：　https://buly.kr/GvoLgJn
+技術ブログ 　：　https://url.kr/xt4qjr
+メール　： whgusghkd777@gmail.com
 
 
 ---
