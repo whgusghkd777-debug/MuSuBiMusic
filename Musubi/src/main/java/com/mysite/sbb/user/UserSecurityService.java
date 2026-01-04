@@ -26,14 +26,15 @@ public class UserSecurityService implements UserDetailsService {
         }
         SiteUser siteUser = _siteUser.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
-        
-        // Roleの値を正確に反映
-        if ("admin".equals(username) || siteUser.getRole() == UserRole.ADMIN) {
+
+
+        if ("admin".equals(username) || UserRole.ADMIN.equals(siteUser.getRole())) {
             authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
+            System.out.println("=== [DEBUG] " + username + " に管理者権限(ROLE_ADMIN)を付与しました ===");
         } else {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
         }
-        
+
         return new User(siteUser.getUsername(), siteUser.getPassword(), authorities);
     }
-} // 閉じ括弧を追加
+}

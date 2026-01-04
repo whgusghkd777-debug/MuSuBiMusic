@@ -19,7 +19,7 @@ public class AuthController {
             response.put("username", auth.getName());
             response.put("isLoggedIn", true);
             
-            // ADMIN 역할 있는지 확인
+            
             boolean isAdmin = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(a -> a.equals("ROLE_ADMIN"));

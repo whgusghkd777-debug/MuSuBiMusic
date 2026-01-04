@@ -58,9 +58,7 @@
                 <tr>
                     <th>タイトル</th>
                     <th>アーティスト</th>
-                    <th>投稿者</th>
-                    <th>作成日</th>
-                    <th>操作</th>
+                    <th>作成日</th> <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,9 +68,9 @@
                     </td>
                     <td th:text="${music.artist}" style="color: #86868B;"></td>
                     <td>
-                        <span th:text="${music.author != null ? music.author.username : '匿名'}" style="font-size: 0.9rem;"></span>
+                        <span th:if="${music.createDate != null}" th:text="${#temporals.format(music.createDate, 'yyyy-MM-dd HH:mm')}"></span>
+                        <span th:if="${music.createDate == null}">-</span>
                     </td>
-                    <td th:text="${#temporals.format(music.createDate, 'yyyy-MM-dd')}" style="color: #86868B; font-size: 0.9rem;"></td>
                     <td>
                         <a href="javascript:void(0);" th:data-uri="@{|/music/delete/${music.id}|}" class="delete btn-delete">削除</a>
                     </td>
@@ -85,7 +83,7 @@
         </div>
 
         <div style="margin-top: 30px;">
-            <a href="/music/list" style="color: #007AFF; text-decoration: none; font-weight: 600;">← ホームへ戻る</a>
+            <a th:href="@{/music/list}" style="color: #007AFF; text-decoration: none; font-weight: 600;">← ホームへ戻る</a>
         </div>
     </div>
 

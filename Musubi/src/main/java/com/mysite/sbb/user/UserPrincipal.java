@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List; // 이 줄이 누락되면 안 됩니다!
+import java.util.List; // 重要です
 
 public class UserPrincipal implements UserDetails {
     private final SiteUser user;
@@ -16,7 +16,7 @@ public class UserPrincipal implements UserDetails {
 
 @Override
 public Collection<? extends GrantedAuthority> getAuthorities() {
-    // DB의 role이 ADMIN이라면 -> ROLE_ADMIN으로 만들어서 시큐리티에게 전달
+    
     return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 }
 

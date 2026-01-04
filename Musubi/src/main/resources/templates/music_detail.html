@@ -34,7 +34,7 @@
                 <h2 th:text="${music.title}" style="font-weight: 800; margin-bottom: 12px; font-size: 2rem;"></h2>
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <a th:href="@{|/music/vote/${music.id}|}" style="text-decoration: none;">
-                        <span style="color: #FF3B30; font-size: 1.1rem; font-weight: 700; background: #FFF5F5; padding: 5px 12px; border-radius: 20px; cursor: pointer;">
+                        <span style="color: #FF3B30; font-size: 1.1rem; font-weight: 700; background: #FFF5F5; padding: 10px 30px; border-radius: 20px; cursor: pointer;">
                             ❤️ <span th:text="${#lists.size(music.voter)}">0</span>
                         </span>
                     </a>
@@ -53,7 +53,8 @@
             </div>
         </div>
 
-        <div th:if="${youtubeId}" style="aspect-ratio: 16/9; width: 100%; border-radius: 24px; overflow: hidden; background: #000; margin-bottom: 40px;">
+        <div th:if="${youtubeId}" 
+        style="aspect-ratio: 16/9; width: 100%; border-radius: 24px; overflow: hidden; background: #000; margin-bottom: 40px;">
             <iframe th:src="@{|https://www.youtube.com/embed/${youtubeId}|}" 
                     style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
         </div>

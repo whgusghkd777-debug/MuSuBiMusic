@@ -15,16 +15,21 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    
+    //役割（Role）に基づいた権限管理
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http  
             .authorizeHttpRequests((authorize) -> authorize
+            // 静的リソース（CSS/JS）やアップロードファイルへのアクセスを許可
                 .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
+                // 管理者（ADMIN）のみ、管理画面および楽曲の削除権限を付与
                 .requestMatchers(new AntPathRequestMatcher("/images/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/upload/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                 .requestMatchers(new AntPathRequestMatcher("/music/delete/**")).hasRole("ADMIN")
+                // その他の一般ページは全ユーザーに公開
                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
             
             .csrf((csrf) -> csrf.disable())
@@ -48,3 +53,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+

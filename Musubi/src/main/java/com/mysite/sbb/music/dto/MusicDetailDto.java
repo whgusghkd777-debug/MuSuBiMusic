@@ -16,7 +16,7 @@ public class MusicDetailDto {
     private String url;
     private String content;
     private LocalDateTime createDate;
-    private String authorName; // 작성자 이름 (SiteUser의 username)
-    private int voterCount;    // 좋아요 개수 (voter.size())
-    private List<Answer> answerList; // 이 음악에 달린 댓글들
+    private String authorName; 
+    private int voterCount;    
+    private List<Answer> answerList; 
 }

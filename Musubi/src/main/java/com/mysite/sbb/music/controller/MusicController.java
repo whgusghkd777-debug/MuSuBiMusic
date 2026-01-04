@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.UUID;
 
+
+
+
 @RequestMapping("/music")
 @RequiredArgsConstructor
 @Controller
@@ -29,7 +32,7 @@ public class MusicController {
 
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id) {
-        Music music = this.musicService.getMusic(id);
+        Music music = this.musicService.getMusic(id);   
         model.addAttribute("music", music);
         
         // YouTube IDの抽出
@@ -39,6 +42,7 @@ public class MusicController {
         return "music_detail";
     }
 
+    
     /* ランダム再生: 既存のロジックを維持 */
     @GetMapping("/random")
     public String randomMusic() {
@@ -52,9 +56,11 @@ public class MusicController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String create() {
-        return "music_form";
+        return "music_form";    
     }
-
+/**
+ * ファイルとURL、両形式に対応した投稿処理
+ */
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String create(@RequestParam("title") String title, @RequestParam("artist") String artist,
@@ -62,15 +68,18 @@ public class MusicController {
                          @RequestParam("file") MultipartFile file, Principal principal) throws IOException {
         SiteUser author = this.userService.getUser(principal.getName());
         String fileName = null;
+        // ファイルがアップロードされた場合、UUIDを用いて一意のファイル名を生成
         if (!file.isEmpty()) {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdirs();
             }
+
             fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             file.transferTo(new File(uploadPath + "/" + fileName));
         }
         // DBのフィールド名に合わせて保存 (filePathと想定)
+        // 形式を問わず、一括でService層を通じてデータベースへ保存
         this.musicService.create(title, artist, url, content, fileName, author);
         return "redirect:/music/list";
     }
