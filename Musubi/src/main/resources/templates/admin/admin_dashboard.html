@@ -15,7 +15,7 @@
         .admin-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 30px;
+            margin-top: 10px;
         }
         .admin-table th {
             text-align: left;
@@ -43,30 +43,52 @@
             background: #FF3B30;
             color: white;
         }
+        .search-container {
+            margin: 25px 0;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #D2D2D7;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            box-sizing: border-box;
+            transition: 0.2s;
+        }
+        .search-input:focus {
+            border-color: #007AFF;
+            box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
+        }
     </style>
 
     <div class="admin-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <h1 style="font-weight: 800; font-size: 1.8rem; margin: 0;">管理者ダッシュボード</h1>
             <span style="background: #FF3B30; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">ADMIN MODE</span>
         </div>
         
-        <p style="color: #86868B;">共有されている全ての楽曲の管理および削除が可能です。</p>
+        <p style="color: #86868B; margin-bottom: 20px;">共有されている全ての楽曲の管理および削除가 가능하다.</p>
 
-        <table class="admin-table">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="タイトル、アーティストで検索..." onkeyup="filterTable()">
+        </div>
+
+        <table class="admin-table" id="adminTable">
             <thead>
                 <tr>
                     <th>タイトル</th>
                     <th>アーティスト</th>
-                    <th>作成日</th> <th>操作</th>
+                    <th>作成日</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="music : ${musicList}">
-                    <td>
+                <tr th:each="music : ${musicList}" class="music-row">
+                    <td class="music-title">
                         <a th:href="@{|/music/detail/${music.id}|}" th:text="${music.title}" style="text-decoration: none; color: #1D1D1F; font-weight: 600;"></a>
                     </td>
-                    <td th:text="${music.artist}" style="color: #86868B;"></td>
+                    <td th:text="${music.artist}" class="music-artist" style="color: #86868B;"></td>
                     <td>
                         <span th:if="${music.createDate != null}" th:text="${#temporals.format(music.createDate, 'yyyy-MM-dd HH:mm')}"></span>
                         <span th:if="${music.createDate == null}">-</span>
@@ -83,11 +105,28 @@
         </div>
 
         <div style="margin-top: 30px;">
-            <a th:href="@{/music/list}" style="color: #007AFF; text-decoration: none; font-weight: 600;">← ホームへ戻る</a>
+            <a th:href="@{/music/list}" style="color: #007AFF; text-decoration: none; font-weight: 600;">← ホームに戻る</a>
         </div>
     </div>
 
     <script type='text/javascript'>
+        function filterTable() {
+            const input = document.getElementById("searchInput");
+            const filter = input.value.toLowerCase();
+            const rows = document.getElementsByClassName("music-row");
+
+            Array.from(rows).forEach(row => {
+                const title = row.querySelector(".music-title").textContent.toLowerCase();
+                const artist = row.querySelector(".music-artist").textContent.toLowerCase();
+                
+                if (title.includes(filter) || artist.includes(filter)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
         const delete_elements = document.getElementsByClassName("delete");
         Array.from(delete_elements).forEach(function(element) {
             element.addEventListener('click', function() {
@@ -97,5 +136,5 @@
             });
         });
     </script>
-</section>
+</section> 
 </html>

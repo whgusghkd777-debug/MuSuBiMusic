@@ -19,7 +19,7 @@
             justify-content: center;
             font-size: 40px;
             text-decoration: none;
-            box-shadow: 0 150px 200px rgba(0, 122, 255, 0.4);
+            box-shadow: 0 15px 30px rgba(0, 122, 255, 0.4); /* 그림자 값 최적화 */
             transition: transform 0.2s ease;
             z-index: 9999;
         }
@@ -44,9 +44,10 @@
                     </span>
                 </div>
             </div>
-            <div sec:authorize="hasRole('ADMIN')">
+
+            <div th:if="${#authorization.expression('hasRole(''ADMIN'')') or (music.author != null and #authentication.getPrincipal().getUsername() == music.author.username)}">
                 <a th:href="@{|/music/delete/${music.id}|}" 
-                   onclick="return confirm('この楽曲を削除しますか？')"
+                   onclick="return confirm('この楽曲を削除しますか？\n削除したデータは復元できません。')"
                    style="display: inline-block; padding: 12px 24px; background: #FF3B30; color: white; border-radius: 12px; text-decoration: none; font-weight: 700;">
                     楽曲削除
                 </a>
@@ -54,7 +55,7 @@
         </div>
 
         <div th:if="${youtubeId}" 
-        style="aspect-ratio: 16/9; width: 100%; border-radius: 24px; overflow: hidden; background: #000; margin-bottom: 40px;">
+             style="aspect-ratio: 16/9; width: 100%; border-radius: 24px; overflow: hidden; background: #000; margin-bottom: 40px;">
             <iframe th:src="@{|https://www.youtube.com/embed/${youtubeId}|}" 
                     style="width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
         </div>
@@ -63,7 +64,7 @@
             <p style="font-weight: 600; margin-bottom: 10px; font-size: 0.9rem;">アップロードされた音源</p>
             <audio controls style="width: 100%;">
                 <source th:src="@{|/upload/${music.filePath}|}" type="audio/mpeg">
-                お使いのブラウザはオーディオ再生に対応していません。
+                お使いのブラウザはオー디오再生に対応していません。
             </audio>
         </div>
 
@@ -73,6 +74,7 @@
 
         <div style="margin-top: 50px; border-top: 2px solid #F2F2F7; padding-top: 40px;">
             <h4 style="font-weight: 700; margin-bottom: 25px;" th:text="|コメント (${#lists.size(music.answerList)})|"></h4>
+            
             <form th:action="@{|/music/answer/create/${music.id}|}" method="post">
                 <textarea name="content" rows="3" required placeholder="コメントを入力してください" 
                           style="width: 100%; border: 1.5px solid #E5E5EA; border-radius: 16px; padding: 20px; outline: none;"></textarea>
@@ -82,6 +84,7 @@
                     </button>
                 </div>
             </form>
+
             <div th:each="answer : ${music.answerList}" style="margin-top: 25px; padding: 25px; background: #F9F9F9; border-radius: 18px;">
                 <div th:text="${answer.content}" style="line-height: 1.6;"></div>
                 <div style="margin-top: 15px; font-size: 0.85rem; color: #8E8E93;">

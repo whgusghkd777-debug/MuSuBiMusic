@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/images/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/upload/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                .requestMatchers(new AntPathRequestMatcher("/music/delete/**")).hasRole("ADMIN")
+                .requestMatchers(new AntPathRequestMatcher("/music/delete/**")).authenticated()
                 // その他の一般ページは全ユーザーに公開
                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
             
@@ -38,6 +38,7 @@ public class SecurityConfig {
             .formLogin((login) -> login
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/music/list")) // /list -> /music/list に修正
+                
             
             .logout((logout) -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))

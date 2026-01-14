@@ -3,6 +3,7 @@ package com.mysite.sbb.music.controller;
 import com.mysite.sbb.music.Music;
 import com.mysite.sbb.music.MusicService;
 import com.mysite.sbb.user.SiteUser;
+import com.mysite.sbb.user.UserRole;
 import com.mysite.sbb.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,13 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.UUID;
-
-
-
 
 @RequestMapping("/music")
 @RequiredArgsConstructor
@@ -32,18 +31,13 @@ public class MusicController {
 
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id) {
-        Music music = this.musicService.getMusic(id);   
+        Music music = this.musicService.getMusic(id);
         model.addAttribute("music", music);
-        
-        // YouTube IDの抽出
         String videoId = this.musicService.extractYoutubeId(music.getUrl());
         model.addAttribute("youtubeId", videoId);
-        
         return "music_detail";
     }
 
-    
-    /* ランダム再生: 既存のロジックを維持 */
     @GetMapping("/random")
     public String randomMusic() {
         Long randomId = this.musicService.getRandomMusicId();
@@ -56,11 +50,9 @@ public class MusicController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String create() {
-        return "music_form";    
+        return "music_form";
     }
-/**
- * ファイルとURL、両形式に対応した投稿処理
- */
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String create(@RequestParam("title") String title, @RequestParam("artist") String artist,
@@ -68,18 +60,14 @@ public class MusicController {
                          @RequestParam("file") MultipartFile file, Principal principal) throws IOException {
         SiteUser author = this.userService.getUser(principal.getName());
         String fileName = null;
-        // ファイルがアップロードされた場合、UUIDを用いて一意のファイル名を生成
         if (!file.isEmpty()) {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdirs();
             }
-
             fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             file.transferTo(new File(uploadPath + "/" + fileName));
         }
-        // DBのフィールド名に合わせて保存 (filePathと想定)
-        // 形式を問わず、一括でService層を通じてデータベースへ保存
         this.musicService.create(title, artist, url, content, fileName, author);
         return "redirect:/music/list";
     }
@@ -95,7 +83,7 @@ public class MusicController {
 
     @GetMapping("/ranking")
     public String ranking(Model model) {
-        model.addAttribute("musicList", this.musicService.getRankingList()); 
+        model.addAttribute("musicList", this.musicService.getRankingList());
         return "ranking";
     }
 
@@ -105,11 +93,25 @@ public class MusicController {
         return "music_list";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String musicDelete(@PathVariable("id") Long id) {
+    public String musicDelete(Principal principal, @PathVariable("id") Long id) {
         Music music = this.musicService.getMusic(id);
+        SiteUser user = this.userService.getUser(principal.getName());
+
+        boolean isAdmin = user.getRole() == UserRole.ADMIN;
+        boolean isAuthor = music.getAuthor().getUsername().equals(principal.getName());
+
+        if (!isAdmin && !isAuthor) {
+            return "redirect:/music/list";
+        }
+
         this.musicService.delete(music);
-        return "redirect:/music/list";
+
+        if (isAdmin) {
+            return "redirect:/music/list";
+        } else {
+            return "redirect:/user/mypage";
+        }
     }
 }
