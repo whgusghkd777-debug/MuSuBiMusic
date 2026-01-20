@@ -165,6 +165,8 @@ MuSuBi　PPT　：　https://buly.kr/GvoLgJn
 
 Test :  https://mu-su-bi-music--whgusghkd777.replit.app
 
+Ruby + Java Ver : https://github.com/whgusghkd777-debug/MusubiRubyver
+
 
 ---
 
