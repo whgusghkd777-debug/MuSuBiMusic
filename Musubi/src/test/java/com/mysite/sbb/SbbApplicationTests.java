@@ -16,7 +16,7 @@ class SbbApplicationTests {
 
     @Test
     void testMusicJpa() {
-        // 기존 Question 테스트를 지우고 Music 테스트로 교체
+       
         Music m = new Music();
         m.setTitle("테스트 음악");
         m.setArtist("가수");
