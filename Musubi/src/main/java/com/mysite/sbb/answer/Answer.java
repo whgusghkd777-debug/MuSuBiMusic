@@ -25,11 +25,11 @@ public class Answer {
 
     private LocalDateTime createDate;
 
-    // Music 엔티티와 N:1 관계 (여러 답변이 하나의 음악에 달림)
+    
     @ManyToOne
     private Music music;
 
-    // 작성자 정보
+    
     @ManyToOne
     private SiteUser author;
 }
