@@ -163,8 +163,6 @@ MuSuBi　PPT　：　https://buly.kr/GvoLgJn
 
 メール　： whgusghkd777@gmail.com
 
-Test :  https://mu-su-bi-music--whgusghkd777.replit.app
-
 Ruby + Java Ver : https://github.com/whgusghkd777-debug/MusubiRubyver
 
 
